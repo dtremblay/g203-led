@@ -35,7 +35,9 @@ Usage:
 \tg203-led [lightsync] breathe {color} [{rate} [{brightness}]] - Single color breathing
 \tg203-led [lightsync] intro {on|off} - Enable/disable startup effect
 \tg203-led [lightsync] dpi {dpi} - Set mouse dpi
-
+\tg203-led logi off            - Turn off the mouse LED
+\tg203-led logi on             - Turn on the mouse LED with pink color
+\tg203-led logi solid {color}  - Set the mouse LED to {color}
 Arguments:
 \tColor: RRGGBB (RGB hex value)
 \tRate: 1000-60000 (Number of milliseconds. Default: 10000ms)
@@ -119,7 +121,7 @@ def main():
         mode = args[2]
         if mode == 'solid':
             print("Applying solid color to logi mouse: " + args[3])
-            set_ls_solid(process_color(args[3]))
+            set_led('01', process_color(args[3]) + '0000000000')
         elif mode == 'off':
             print("Turning off mouse LED")
             set_led('00', "000000" + '0000000000')
