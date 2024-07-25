@@ -1,4 +1,4 @@
-#!env/bin/python
+#!/usr/bin/python
 
 # Logitech G203 Prodigy / G203 LightSync Mouse LED control
 # https://github.com/smasty/g203-led
@@ -15,6 +15,7 @@ g203_vendor_id =  0x046d
 g203_prodigy_product_id = 0xc084
 g203_lightsync_product_id = 0xc092
 g203_product_id = g203_prodigy_product_id
+logi_product_id = 0xc08c
 
 default_rate = 10000
 default_brightness = 100
@@ -63,6 +64,7 @@ def main():
     args = sys.argv + [None] * (6 - len(sys.argv))
 
     mode = args[1]
+
     if mode == 'solid':
         set_led_solid(process_color(args[2]))
     elif mode == 'cycle':
@@ -111,6 +113,21 @@ def main():
             set_ls_blend(process_rate(args[3]), process_brightness(args[4]))
         else:
             print_error('Unknown lightsync mode.')
+    # Determine if a logi mouse is installed
+    elif mode == 'logi':
+        g203_product_id = logi_product_id
+        mode = args[2]
+        if mode == 'solid':
+            print("Applying solid color to logi mouse: " + args[3])
+            set_ls_solid(process_color(args[3]))
+        elif mode == 'off':
+            print("Turning off mouse LED")
+            set_led('00', "000000" + '0000000000')
+        elif mode == 'on':
+            print("Turning on mouse LED")
+            set_led('01', "880088" + '0000000000')
+        else:
+            print_error('Unknown logi mode.')
     else:
         print_error('Unknown mode.')
 
